@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCSTORE | Sri Lanka's Premium Shopping Hub</title>
+    <title>NCSTORE | Premium Shopping Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,166 +11,76 @@
         
         :root {
             --nc-navy: #131921;
-            --nc-light-navy: #232f3e;
             --nc-gold: #febd69;
             --nc-orange: #e47911;
         }
 
-        body {
-            font-family: 'Public Sans', sans-serif;
-            background-color: #f0f2f2;
-            color: #111;
-            scroll-behavior: smooth;
-        }
-
-        * { transition: all 0.2s ease-in-out; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .product-card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border-color: var(--nc-gold);
-        }
-
-        .hero-container {
-            height: 500px;
-            background-color: var(--nc-navy);
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .hero-content-wrapper {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .hero-slide-item {
-            min-width: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        @media (min-width: 768px) {
-            .hero-slide-item { flex-direction: row; }
-            .hero-text-side { width: 50%; padding: 0 5%; }
-            .hero-image-side { width: 50%; }
-        }
-
-        .hero-image-side img { width: 100%; height: 100%; object-fit: cover; }
-
-        .hero-dot {
-            width: 10px; height: 10px; border-radius: 50%;
-            background: rgba(255,255,255,0.3); cursor: pointer;
-        }
-        .hero-dot.active { background: var(--nc-gold); width: 30px; border-radius: 10px; }
-
-        .gallery-thumb { border: 2px solid #ddd; cursor: pointer; }
-        .gallery-thumb.active { border-color: var(--nc-orange); box-shadow: 0 0 3px var(--nc-orange); }
-
-        .price-option:checked + label {
-            border-color: var(--nc-orange); background-color: #fffaf5;
-            box-shadow: 0 0 0 1px var(--nc-orange);
-        }
-
+        body { font-family: 'Public Sans', sans-serif; background-color: #f0f2f2; color: #111; }
+        .product-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; transition: 0.3s; cursor: pointer; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--nc-gold); }
         .hidden-view { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-16 md:pb-0">
 
     <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[5000]">
-        <div class="bg-[#131921] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-[#febd69]">
+        <div class="bg-black text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-[#febd69]">
             <i class="fas fa-check-circle text-[#febd69]"></i>
-            <span id="toast-msg" class="font-bold italic uppercase tracking-tight">Updated!</span>
+            <span id="toast-msg" class="font-bold uppercase tracking-tight">Updated!</span>
         </div>
     </div>
 
-    <header class="sticky top-0 z-[100]">
-        <div class="bg-[#131921] px-4 py-2 flex items-center justify-between gap-4">
-            <a href="#" onclick="showHome()" class="flex items-center p-2">
-                <div class="flex flex-col leading-none">
-                    <span class="text-3xl font-black text-white tracking-tighter italic">NC<span class="text-[#febd69]">STORE</span></span>
-                    <span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Premium Hub</span>
-                </div>
+    <header class="sticky top-0 z-[100] bg-[#131921] text-white">
+        <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+            <a href="#" onclick="showHome()" class="flex flex-col">
+                <span class="text-3xl font-black italic tracking-tighter">NC<span class="text-[#febd69]">STORE</span></span>
+                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Premium Hub</span>
             </a>
-            <div class="flex-1 hidden md:flex h-11 items-center bg-white rounded-lg overflow-hidden border-2 border-transparent focus-within:border-[#febd69]">
-                <input type="text" id="search-input" placeholder="Search NCSTORE Premium..." class="flex-1 px-4 text-sm outline-none">
-                <button class="bg-[#febd69] hover:bg-[#f3a847] px-6 h-full text-lg"><i class="fas fa-search"></i></button>
+            
+            <div onclick="toggleCart()" class="relative p-2 cursor-pointer border border-transparent hover:border-white rounded">
+                <i class="fas fa-shopping-cart text-2xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-[#e47911] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
             </div>
-            <div onclick="toggleCart()" class="relative flex items-center p-2 text-white cursor-pointer group">
-                <div class="relative">
-                    <i class="fas fa-shopping-cart text-2xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#e47911] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#131921]">0</span>
-                </div>
-            </div>
+        </div>
+        <div class="bg-[#232f3e] px-4 py-2 text-xs font-bold uppercase flex gap-6 overflow-x-auto no-scrollbar">
+            <a href="#" onclick="showHome()">Home</a>
+            <a href="#">Audio</a>
+            <a href="#">Computing</a>
+            <a href="#">Gaming</a>
         </div>
     </header>
 
-    <div id="home-view">
-        <div class="hero-container">
-            <div class="hero-content-wrapper" id="hero-slider">
-                <div class="hero-slide-item">
-                    <div class="hero-text-side flex flex-col justify-center px-6 py-10 text-white">
-                        <div class="space-y-4">
-                            <span class="inline-block bg-[#e47911] px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Apple Selection</span>
-                            <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter leading-[0.9] uppercase">The M3 <br><span class="text-[#febd69]">Revolution</span></h1>
-                        </div>
-                    </div>
-                    <div class="hero-image-side h-full">
-                        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=1600&q=80">
-                    </div>
-                </div>
+    <main class="container mx-auto px-4 py-8">
+        
+        <div id="home-view">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="deals-grid">
+                <p class="col-span-full text-center py-10">Loading items...</p>
             </div>
         </div>
 
-        <div class="container mx-auto px-4 -mt-10 relative z-30 mb-10">
-            <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-200">
-                <div class="flex justify-between items-center mb-8 border-l-4 border-[#e47911] pl-3">
-                    <h2 class="text-2xl font-black uppercase italic tracking-tighter">Premium Deals Today</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="deals-grid">
-                    </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="product-detail-view" class="hidden-view bg-white min-h-screen">
-        <div class="container mx-auto px-4 py-8">
-            <button onclick="showHome()" class="mb-6 font-bold text-gray-600 uppercase tracking-widest text-sm">
-                <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <div class="flex flex-col lg:flex-row gap-12" id="detail-container">
+        <div id="product-detail-view" class="hidden-view">
+            <button onclick="showHome()" class="mb-6 font-bold text-gray-500 uppercase text-xs"><i class="fas fa-arrow-left mr-2"></i>Back</button>
+            <div id="detail-content" class="bg-white rounded-3xl p-6 md:p-10 shadow-sm flex flex-col md:flex-row gap-10">
                 </div>
         </div>
-    </div>
+    </main>
 
     <div id="cart-drawer" class="fixed inset-0 z-[1100] hidden">
         <div class="absolute inset-0 bg-black/60" onclick="toggleCart()"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#f0f2f2] shadow-2xl flex flex-col">
-            <div class="bg-[#131921] text-white p-5 flex justify-between items-center">
-                <h3 class="font-black italic uppercase">Basket</h3>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div class="bg-[#131921] text-white p-5 flex justify-between items-center font-bold italic uppercase">
+                <span>Your Basket</span>
                 <button onclick="toggleCart()" class="text-2xl">&times;</button>
             </div>
-            <div id="cart-content" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-            <div class="bg-white p-6 border-t">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-lg font-black uppercase">Total</span>
-                    <span class="text-2xl font-black text-[#B12704]" id="cart-total-price">Rs. 0</span>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+            <div class="p-6 border-t bg-gray-50">
+                <div class="flex justify-between items-center mb-4 font-black text-xl italic uppercase">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-red-700">Rs. 0</span>
                 </div>
-                <button onclick="checkoutWhatsApp()" class="w-full bg-[#ffa41c] py-4 rounded-xl font-black uppercase italic shadow-lg">
-                    Checkout via WhatsApp
+                <button onclick="checkoutWhatsApp()" class="w-full bg-[#ffa41c] hover:bg-[#f3a847] py-4 rounded-xl font-bold uppercase shadow-lg flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-xl"></i> Checkout via WhatsApp
                 </button>
             </div>
         </div>
@@ -180,40 +90,50 @@
         let storeItems = [];
         let cart = [];
         let activeProduct = null;
-        let selectedVariantIdx = 0;
 
-        // 1. DATA LOAD
-        async function loadData() {
+        // FETCH DATA
+        async function loadStoreData() {
             try {
-                // cache: 'no-store' එක මගින් GitHub එකේ වෙනස ඉක්මනින් පෙන්වයි
-                const res = await fetch('data.json', { cache: 'no-store' });
-                if(!res.ok) throw new Error("JSON not found");
-                storeItems = await res.json();
-                renderDeals();
+                const response = await fetch('data.json', { cache: 'no-store' });
+                storeItems = await response.json();
+                renderItems();
             } catch (err) {
-                console.error("Error:", err);
-                document.getElementById('deals-grid').innerHTML = "<p class='text-red-500'>දත්ත ලබාගැනීමට නොහැකි විය. data.json පරීක්ෂා කරන්න.</p>";
+                console.error("Fetch Error:", err);
+                document.getElementById('deals-grid').innerHTML = "Failed to load data. Please check data.json file.";
             }
         }
 
-        function renderDeals() {
+        function renderItems() {
             const grid = document.getElementById('deals-grid');
             grid.innerHTML = storeItems.map(item => `
-                <div class="product-card p-4 flex flex-col" onclick="showProductDetail(${item.id})">
-                    <div class="h-40 flex items-center justify-center mb-4"><img src="${item.img}" class="max-h-full object-contain"></div>
-                    <p class="text-[9px] text-orange-600 font-black uppercase">${item.category}</p>
-                    <h4 class="text-sm font-bold text-gray-800 line-clamp-2 mb-2">${item.name}</h4>
-                    <p class="text-lg font-black">Rs. ${item.variants[0].price.toLocaleString()}</p>
+                <div class="product-card p-4" onclick="showProductDetail(${item.id})">
+                    <img src="${item.img}" class="w-full h-40 object-contain mb-4">
+                    <p class="text-[10px] text-orange-600 font-bold uppercase">${item.category}</p>
+                    <h3 class="text-sm font-bold line-clamp-2 mb-2 h-10">${item.name}</h3>
+                    <p class="text-lg font-black italic">Rs. ${item.variants[0].price.toLocaleString()}</p>
                 </div>
             `).join('');
         }
 
         function showProductDetail(id) {
             activeProduct = storeItems.find(i => i.id === id);
-            selectedVariantIdx = 0;
             document.getElementById('home-view').classList.add('hidden-view');
-            document.getElementById('product-detail-view').classList.remove('hidden-view');
-            updateDetailUI();
+            const detailView = document.getElementById('product-detail-view');
+            detailView.classList.remove('hidden-view');
+            
+            document.getElementById('detail-content').innerHTML = `
+                <div class="w-full md:w-1/2">
+                    <img src="${activeProduct.img}" class="w-full h-auto object-contain bg-gray-50 rounded-2xl p-6">
+                </div>
+                <div class="w-full md:w-1/2 space-y-6">
+                    <p class="text-blue-600 font-black uppercase text-xs">${activeProduct.category}</p>
+                    <h1 class="text-3xl md:text-4xl font-black italic uppercase tracking-tighter">${activeProduct.name}</h1>
+                    <p class="text-4xl font-black text-red-700">Rs. ${activeProduct.variants[0].price.toLocaleString()}</p>
+                    <div class="text-gray-600 text-sm leading-relaxed">${activeProduct.description}</div>
+                    <button onclick="addToCart()" class="w-full md:w-auto bg-[#febd69] px-10 py-4 rounded-xl font-black uppercase shadow-lg hover:bg-[#f3a847]">Add to Basket</button>
+                </div>
+            `;
+            window.scrollTo(0, 0);
         }
 
         function showHome() {
@@ -221,67 +141,57 @@
             document.getElementById('product-detail-view').classList.add('hidden-view');
         }
 
-        function updateDetailUI() {
-            const v = activeProduct.variants[selectedVariantIdx];
-            const detailView = document.getElementById('product-detail-view').querySelector('.container');
-            
-            // UI Update Logic (Simplified for stability)
-            document.getElementById('detail-container').innerHTML = `
-                <div class="w-full lg:w-1/2">
-                    <img src="${activeProduct.img}" class="w-full rounded-3xl bg-gray-50 p-8">
-                </div>
-                <div class="w-full lg:w-1/2">
-                    <h1 class="text-4xl font-black uppercase italic">${activeProduct.name}</h1>
-                    <p class="text-3xl font-black text-orange-600 mt-4">Rs. ${v.price.toLocaleString()}</p>
-                    <div class="mt-8">
-                        <button onclick="addToCart()" class="bg-[#febd69] px-8 py-4 rounded-xl font-black uppercase">Add to Basket</button>
-                    </div>
-                    <div class="mt-8 text-gray-600">${activeProduct.description}</div>
-                </div>
-            `;
-        }
-
         function addToCart() {
-            const variant = activeProduct.variants[selectedVariantIdx];
-            const item = { name: activeProduct.name, price: variant.price, img: activeProduct.img, qty: 1 };
-            cart.push(item);
+            cart.push({ ...activeProduct, price: activeProduct.variants[0].price });
             updateCartUI();
-            showToast("Added!");
+            showToast("Item added to basket!");
         }
 
         function updateCartUI() {
-            const container = document.getElementById('cart-content');
+            const container = document.getElementById('cart-items');
             let total = 0;
-            container.innerHTML = cart.map((item, idx) => {
+            container.innerHTML = cart.map((item, index) => {
                 total += item.price;
-                return `<div class="bg-white p-4 rounded-xl border flex gap-4">
-                    <img src="${item.img}" class="w-12 h-12 object-contain">
-                    <div>
-                        <p class="text-xs font-bold">${item.name}</p>
-                        <p class="text-orange-600 font-bold">Rs. ${item.price.toLocaleString()}</p>
+                return `
+                    <div class="flex gap-4 bg-gray-50 p-3 rounded-xl border">
+                        <img src="${item.img}" class="w-16 h-16 object-contain">
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold uppercase line-clamp-1">${item.name}</h4>
+                            <p class="font-bold text-red-700">Rs. ${item.price.toLocaleString()}</p>
+                            <button onclick="removeItem(${index})" class="text-[10px] text-gray-400 font-bold uppercase hover:text-red-500">Remove</button>
+                        </div>
                     </div>
-                </div>`;
+                `;
             }).join('');
-            document.getElementById('cart-total-price').innerText = `Rs. ${total.toLocaleString()}`;
+            document.getElementById('cart-total').innerText = `Rs. ${total.toLocaleString()}`;
             document.getElementById('cart-count').innerText = cart.length;
         }
 
-        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
-        
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('hidden');
+        }
+
         function showToast(msg) {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
             t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 2000);
+            setTimeout(() => t.classList.add('hidden'), 2500);
         }
 
         function checkoutWhatsApp() {
-            let msg = "Hello NCSTORE, I want to buy:\n";
-            cart.forEach(i => msg += `- ${i.name} (Rs. ${i.price})\n`);
-            window.open(`https://wa.me/947XXXXXXXX?text=${encodeURIComponent(msg)}`);
+            if(cart.length === 0) return alert("Basket is empty!");
+            let msg = `*New Order from NCSTORE*%0A%0A`;
+            cart.forEach(i => msg += `• ${i.name} - Rs.${i.price.toLocaleString()}%0A`);
+            msg += `%0A*Total: ${document.getElementById('cart-total').innerText}*`;
+            window.open(`https://wa.me/94771234567?text=${msg}`); // මෙතන ඔබේ අංකය දාන්න
         }
 
-        window.onload = loadData;
+        window.onload = loadStoreData;
     </script>
 </body>
 </html>
