@@ -8,7 +8,7 @@
         "video": "https://www.youtube.com/embed/S_8n0769XlE",
         "description": "The world's best noise cancelling gets even better.",
         "variants": [
-            { "label": "Standard Edition", "price": 85000, "oldPrice": 95000 },
+            { "label": "Standard Edition", "price": 10000, "oldPrice": 95000 },
             { "label": "Midnight Blue", "price": 88000, "oldPrice": 98000 }
         ]
     },
