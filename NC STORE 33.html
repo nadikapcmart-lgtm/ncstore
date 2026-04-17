@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCSTORE | Sri Lanka's Premium Shopping Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --nc-navy: #131921;
+            --nc-light-navy: #232f3e;
+            --nc-gold: #febd69;
+            --nc-orange: #e47911;
+            --whatsapp-green: #25D366;
+        }
+
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #f0f2f2;
+            color: #111;
+            scroll-behavior: smooth;
+        }
+
+        * { transition: all 0.2s ease-in-out; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: var(--nc-gold);
+        }
+
+        /* HERO STYLES */
+        .hero-container {
+            height: 500px;
+            background-color: var(--nc-navy);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-content-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hero-slide-item {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .hero-slide-item { flex-direction: row; }
+            .hero-text-side { width: 50%; padding: 0 5%; }
+            .hero-image-side { width: 50%; }
+        }
+
+        .hero-image-side img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+        .hero-dot.active {
+            background: var(--nc-gold);
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        .gallery-thumb { border: 2px solid #ddd; cursor: pointer; }
+        .gallery-thumb.active { border-color: var(--nc-orange); box-shadow: 0 0 3px var(--nc-orange); }
+
+        .price-option:checked + label {
+            border-color: var(--nc-orange);
+            background-color: #fffaf5;
+            box-shadow: 0 0 0 1px var(--nc-orange);
+        }
+
+        /* PAGE TRANSITIONS */
+        #home-view, #product-detail-view {
+            min-height: 100vh;
+        }
+
+        .hidden-view {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="pb-16 md:pb-0">
+
+    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[5000]">
+        <div class="bg-[#131921] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-[#febd69]">
+            <i class="fas fa-check-circle text-[#febd69]"></i>
+            <span id="toast-msg" class="font-bold italic uppercase tracking-tight">Updated!</span>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-[100]">
+        <div class="bg-[#131921] px-4 py-2 flex items-center justify-between gap-4">
+            <a href="#" onclick="showHome()" class="flex items-center p-2">
+                <div class="flex flex-col leading-none">
+                    <span class="text-3xl font-black text-white tracking-tighter italic">NC<span class="text-[#febd69]">STORE</span></span>
+                    <span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Premium Hub</span>
+                </div>
+            </a>
+            
+            <div class="flex-1 hidden md:flex h-11 items-center bg-white rounded-lg overflow-hidden border-2 border-transparent focus-within:border-[#febd69]">
+                <input type="text" placeholder="Search NCSTORE Premium..." class="flex-1 px-4 text-sm outline-none">
+                <button class="bg-[#febd69] hover:bg-[#f3a847] px-6 h-full text-lg"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="flex items-center text-white gap-2">
+                <div onclick="toggleCart()" class="relative flex items-center p-2 border border-transparent hover:border-white rounded-sm cursor-pointer group">
+                    <div class="relative">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-[#e47911] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#131921]">0</span>
+                    </div>
+                    <span class="ml-2 font-bold text-sm hidden lg:block">Basket</span>
+                </div>
+            </div>
+        </div>
+        <div class="bg-[#232f3e] px-4 py-1.5 flex items-center space-x-6 text-white text-sm overflow-x-auto no-scrollbar font-medium">
+            <a href="#" onclick="showHome()" class="hover:underline">Home</a>
+            <a href="#" class="hover:underline whitespace-nowrap">Audio</a>
+            <a href="#" class="hover:underline whitespace-nowrap">Computing</a>
+            <a href="#" class="hover:underline whitespace-nowrap">Gaming</a>
+        </div>
+    </header>
+
+    <!-- HOME VIEW -->
+    <div id="home-view">
+        <div class="hero-container">
+            <div class="hero-content-wrapper" id="hero-slider">
+                <div class="hero-slide-item">
+                    <div class="hero-text-side flex flex-col justify-center px-6 py-10 text-white">
+                        <div class="space-y-4">
+                            <span class="inline-block bg-[#e47911] px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Apple Selection</span>
+                            <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter leading-[0.9] uppercase">The M3 <br><span class="text-[#febd69]">Revolution</span></h1>
+                            <p class="text-gray-400 text-sm md:text-base max-w-md font-medium">Supercharged by Apple silicon. Performance that changes everything.</p>
+                        </div>
+                    </div>
+                    <div class="hero-image-side h-full">
+                        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=1600&q=80" alt="MacBook">
+                    </div>
+                </div>
+                <div class="hero-slide-item">
+                    <div class="hero-text-side flex flex-col justify-center px-6 py-10 text-white">
+                        <div class="space-y-4">
+                            <span class="inline-block bg-blue-600 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Studio Audio</span>
+                            <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter leading-[0.9] uppercase">Sony <br><span class="text-[#febd69]">XM5 Series</span></h1>
+                            <p class="text-gray-400 text-sm md:text-base max-w-md font-medium">Best in class noise cancellation for the true audiophile.</p>
+                        </div>
+                    </div>
+                    <div class="hero-image-side h-full">
+                        <img src="https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=1600&q=80" alt="Headphones">
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-10 left-10 flex gap-3 z-50">
+                <div class="hero-dot active" onclick="goToSlide(0)"></div>
+                <div class="hero-dot" onclick="goToSlide(1)"></div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 -mt-10 relative z-30 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-200">
+                <div class="flex justify-between items-center mb-8 border-l-4 border-[#e47911] pl-3">
+                    <h2 class="text-2xl font-black uppercase italic tracking-tighter">Premium Deals Today</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="deals-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL VIEW (Full Page) -->
+    <div id="product-detail-view" class="hidden-view bg-white">
+        <div class="container mx-auto px-4 py-8">
+            <button onclick="showHome()" class="mb-6 flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-black uppercase tracking-widest">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </button>
+
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- Gallery -->
+                <div class="w-full lg:w-1/2 space-y-4">
+                    <div class="bg-gray-50 rounded-3xl p-8 flex items-center justify-center min-h-[400px]">
+                        <img id="detail-main-img" src="" class="max-h-[500px] object-contain">
+                        <div id="detail-main-video" class="hidden w-full aspect-video">
+                            <iframe id="detail-video-iframe" class="w-full h-full rounded-2xl" src="" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto no-scrollbar py-2" id="detail-thumbs"></div>
+                </div>
+
+                <!-- Info -->
+                <div class="w-full lg:w-1/2">
+                    <p id="detail-cat" class="text-xs text-blue-600 font-black uppercase mb-2">Category</p>
+                    <h1 id="detail-name" class="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-6 uppercase italic tracking-tighter">Product Name</h1>
+                    
+                    <div class="flex items-center gap-4 mb-8">
+                        <span id="detail-discount" class="text-red-600 text-4xl font-light">-0%</span>
+                        <div>
+                            <p class="text-4xl font-black" id="detail-price">Rs. 0</p>
+                            <p class="text-sm text-gray-500">M.R.P: <span class="line-through" id="detail-oldprice">Rs. 0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <p class="text-xs font-black uppercase mb-4 text-gray-500">Select Specification:</p>
+                        <div id="detail-variants" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                    </div>
+
+                    <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 mb-8">
+                        <div class="flex items-center gap-6 mb-8">
+                            <span class="text-xs font-black uppercase text-gray-500">Quantity</span>
+                            <div class="flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
+                                <button onclick="adjustQty(-1)" class="px-5 py-2 hover:bg-gray-100 font-bold text-xl border-r">-</button>
+                                <input type="number" id="detail-qty-input" value="1" min="1" class="w-16 text-center font-black text-lg outline-none">
+                                <button onclick="adjustQty(1)" class="px-5 py-2 hover:bg-gray-100 font-bold text-xl border-l">+</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="addToCart()" class="bg-[#febd69] hover:bg-[#f3a847] py-5 rounded-2xl font-black text-sm uppercase italic shadow-xl">Add to Basket</button>
+                            <button class="bg-[#ffa41c] hover:bg-[#fa8900] py-5 rounded-2xl font-black text-sm uppercase italic shadow-xl">Buy Now</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-black uppercase italic mb-4 border-b pb-2">Technical Description</h4>
+                        <div id="detail-desc" class="text-sm leading-relaxed text-gray-600 space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-[1100] hidden">
+        <div class="absolute inset-0 bg-black/60" onclick="toggleCart()"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#f0f2f2] shadow-2xl flex flex-col">
+            <div class="bg-[#131921] text-white p-5 flex justify-between items-center">
+                <h3 class="font-black italic uppercase tracking-tight">Your Basket</h3>
+                <button onclick="toggleCart()" class="text-2xl hover:text-[#febd69]">&times;</button>
+            </div>
+            <div id="cart-content" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"></div>
+            <div class="bg-white p-6 border-t shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-lg font-black italic uppercase">Total</span>
+                    <span class="text-2xl font-black text-[#B12704]" id="cart-total-price">Rs. 0</span>
+                </div>
+                <button class="w-full bg-[#ffa41c] hover:bg-[#fa8900] py-4 rounded-xl font-black text-xs uppercase italic flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fab fa-whatsapp"></i> Checkout via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const storeItems = [
+            { 
+                id: 1, 
+                category: 'Audio', 
+                name: "Sony WH-1000XM5 Noise Cancelling", 
+                img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", 
+                images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=800", "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800"], 
+                video: "https://www.youtube.com/embed/S_8n0769XlE",
+                description: "The world's best noise cancelling gets even better. <br><br> • Integrated Processor V1 <br> • 8 Microphones for noise cancellation <br> • Precise Voice Pickup technology.",
+                variants: [
+                    { label: "Standard Edition", price: 85000, oldPrice: 95000 },
+                    { label: "Midnight Blue", price: 88000, oldPrice: 98000 }
+                ]
+            },
+            { 
+                id: 2, 
+                category: 'Computing', 
+                name: "MacBook Pro M3 Max 16\"", 
+                img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800", 
+                images: ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800", "https://images.unsplash.com/photo-1611186871348-b1ec696e523b?w=800"], 
+                video: "https://www.youtube.com/embed/0pg_Y41waaE",
+                description: "Mind-blowing performance. Boundary-pushing display. <br><br> • M3 Max with 16-core CPU <br> • 128GB Unified Memory support <br> • Liquid Retina XDR screen.",
+                variants: [
+                    { label: "16GB / 512GB", price: 425000, oldPrice: 480000 },
+                    { label: "32GB / 1TB", price: 545000, oldPrice: 620000 }
+                ]
+            }
+        ];
+
+        let cart = [];
+        let activeProduct = null;
+        let selectedVariantIdx = 0;
+        let currentHeroSlide = 0;
+
+        // NAVIGATION LOGIC
+        function showHome() {
+            document.getElementById('home-view').classList.remove('hidden-view');
+            document.getElementById('product-detail-view').classList.add('hidden-view');
+            window.scrollTo(0, 0);
+        }
+
+        function showProductDetail(id) {
+            activeProduct = storeItems.find(i => i.id === id);
+            selectedVariantIdx = 0;
+            document.getElementById('home-view').classList.add('hidden-view');
+            document.getElementById('product-detail-view').classList.remove('hidden-view');
+            updateDetailUI();
+            window.scrollTo(0, 0);
+        }
+
+        // HERO SLIDER
+        function goToSlide(index) {
+            const slider = document.getElementById('hero-slider');
+            const dots = document.querySelectorAll('.hero-dot');
+            currentHeroSlide = index;
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        }
+
+        setInterval(() => goToSlide((currentHeroSlide + 1) % 2), 8000);
+
+        // DATA RENDERING
+        function renderDeals() {
+            const grid = document.getElementById('deals-grid');
+            grid.innerHTML = storeItems.map(item => `
+                <div class="product-card p-4 flex flex-col" onclick="showProductDetail(${item.id})">
+                    <div class="h-40 flex items-center justify-center mb-4"><img src="${item.img}" class="max-h-full object-contain"></div>
+                    <p class="text-[9px] text-orange-600 font-black uppercase tracking-widest">${item.category}</p>
+                    <h4 class="text-sm font-bold text-gray-800 line-clamp-2 mb-2">${item.name}</h4>
+                    <p class="text-lg font-black text-gray-900">Rs. ${item.variants[0].price.toLocaleString()}</p>
+                    <p class="text-[10px] text-gray-400 line-through italic">M.R.P Rs. ${item.variants[0].oldPrice.toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        function updateDetailUI() {
+            const variant = activeProduct.variants[selectedVariantIdx];
+            document.getElementById('detail-name').innerText = activeProduct.name;
+            document.getElementById('detail-price').innerText = `Rs. ${variant.price.toLocaleString()}`;
+            document.getElementById('detail-oldprice').innerText = `Rs. ${variant.oldPrice.toLocaleString()}`;
+            document.getElementById('detail-cat').innerText = activeProduct.category;
+            document.getElementById('detail-desc').innerHTML = activeProduct.description;
+            
+            const disc = Math.round(((variant.oldPrice - variant.price) / variant.oldPrice) * 100);
+            document.getElementById('detail-discount').innerText = `-${disc}%`;
+
+            // Render Thumbnails
+            const thumbContainer = document.getElementById('detail-thumbs');
+            let thumbsHtml = activeProduct.images.map((img, i) => `
+                <div class="gallery-thumb w-20 h-20 shrink-0 rounded-xl p-2 bg-gray-50 border-2 ${i===0?'active':''}" onclick="switchMedia(${i}, 'image')">
+                    <img src="${img}" class="w-full h-full object-contain">
+                </div>
+            `).join('');
+            
+            thumbsHtml += `
+                <div class="gallery-thumb w-20 h-20 shrink-0 rounded-xl p-2 bg-gray-100 border-2 relative" onclick="switchMedia(${activeProduct.images.length}, 'video')">
+                    <img src="${activeProduct.img}" class="w-full h-full object-contain opacity-40">
+                    <i class="fas fa-play-circle absolute inset-0 flex items-center justify-center text-red-600 text-2xl"></i>
+                </div>
+            `;
+            thumbContainer.innerHTML = thumbsHtml;
+
+            // Variants
+            const variantContainer = document.getElementById('detail-variants');
+            variantContainer.innerHTML = activeProduct.variants.map((v, idx) => `
+                <div class="relative">
+                    <input type="radio" name="variant" id="v-${idx}" class="hidden price-option" ${idx === selectedVariantIdx ? 'checked' : ''} onchange="selectedVariantIdx = ${idx}; updateDetailUI()">
+                    <label for="v-${idx}" class="block border-2 border-gray-200 p-4 rounded-2xl cursor-pointer hover:border-[#febd69]">
+                        <p class="text-[10px] font-black uppercase text-gray-500 mb-1">${v.label}</p>
+                        <p class="text-sm font-black">Rs. ${v.price.toLocaleString()}</p>
+                    </label>
+                </div>
+            `).join('');
+
+            switchMedia(0, 'image');
+        }
+
+        function switchMedia(index, type) {
+            const imgEl = document.getElementById('detail-main-img');
+            const videoEl = document.getElementById('detail-main-video');
+            const iframe = document.getElementById('detail-video-iframe');
+            
+            document.querySelectorAll('.gallery-thumb').forEach((t, i) => i === index ? t.classList.add('active') : t.classList.remove('active'));
+            
+            if(type === 'image') {
+                imgEl.classList.remove('hidden'); videoEl.classList.add('hidden');
+                imgEl.src = activeProduct.images[index] || activeProduct.img;
+                iframe.src = "";
+            } else {
+                imgEl.classList.add('hidden'); videoEl.classList.remove('hidden');
+                iframe.src = activeProduct.video;
+            }
+        }
+
+        function adjustQty(val) {
+            const input = document.getElementById('detail-qty-input');
+            input.value = Math.max(1, (parseInt(input.value) || 1) + val);
+        }
+
+        function addToCart() {
+            const variant = activeProduct.variants[selectedVariantIdx];
+            const qty = parseInt(document.getElementById('detail-qty-input').value);
+            const cartKey = `${activeProduct.id}-${selectedVariantIdx}`;
+            
+            const existing = cart.find(c => c.cartKey === cartKey);
+            if(existing) existing.qty += qty;
+            else cart.push({ cartKey, name: `${activeProduct.name} (${variant.label})`, price: variant.price, img: activeProduct.img, qty });
+            
+            updateCartUI();
+            showToast("Basket Updated!");
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-content');
+            let subtotal = 0; let totalQty = 0;
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-30 italic font-bold">Your basket is empty</div>`;
+            } else {
+                container.innerHTML = cart.map(item => {
+                    subtotal += (item.price * item.qty);
+                    totalQty += item.qty;
+                    return `
+                        <div class="bg-white p-4 rounded-2xl border flex gap-4">
+                            <img src="${item.img}" class="w-16 h-16 object-contain bg-gray-50 rounded-lg p-1">
+                            <div class="flex-1">
+                                <h5 class="text-[11px] font-black uppercase italic">${item.name}</h5>
+                                <p class="text-xs font-bold text-[#B12704] mt-1">Rs. ${item.price.toLocaleString()} x ${item.qty}</p>
+                                <button onclick="removeFromCart('${item.cartKey}')" class="text-[10px] text-gray-400 hover:text-red-500 font-bold uppercase mt-2">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            document.getElementById('cart-count').innerText = totalQty;
+            document.getElementById('cart-total-price').innerText = `Rs. ${subtotal.toLocaleString()}`;
+        }
+
+        function removeFromCart(key) { cart = cart.filter(i => i.cartKey !== key); updateCartUI(); }
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
+        function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2000); }
+
+        window.onload = () => { renderDeals(); updateCartUI(); };
+    </script>
+</body>
+</html>
