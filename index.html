@@ -25,7 +25,6 @@
         }
 
         * { transition: all 0.2s ease-in-out; }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -42,7 +41,6 @@
             border-color: var(--nc-gold);
         }
 
-        /* HERO STYLES */
         .hero-container {
             height: 500px;
             background-color: var(--nc-navy);
@@ -100,14 +98,8 @@
             box-shadow: 0 0 0 1px var(--nc-orange);
         }
 
-        /* PAGE TRANSITIONS */
-        #home-view, #product-detail-view {
-            min-height: 100vh;
-        }
-
-        .hidden-view {
-            display: none !important;
-        }
+        #home-view, #product-detail-view { min-height: 100vh; }
+        .hidden-view { display: none !important; }
     </style>
 </head>
 <body class="pb-16 md:pb-0">
@@ -119,7 +111,6 @@
         </div>
     </div>
 
-    <!-- HEADER -->
     <header class="sticky top-0 z-[100]">
         <div class="bg-[#131921] px-4 py-2 flex items-center justify-between gap-4">
             <a href="#" onclick="showHome()" class="flex items-center p-2">
@@ -152,7 +143,6 @@
         </div>
     </header>
 
-    <!-- HOME VIEW -->
     <div id="home-view">
         <div class="hero-container">
             <div class="hero-content-wrapper" id="hero-slider">
@@ -192,12 +182,12 @@
                 <div class="flex justify-between items-center mb-8 border-l-4 border-[#e47911] pl-3">
                     <h2 class="text-2xl font-black uppercase italic tracking-tighter">Premium Deals Today</h2>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="deals-grid"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="deals-grid">
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- PRODUCT DETAIL VIEW (Full Page) -->
     <div id="product-detail-view" class="hidden-view bg-white">
         <div class="container mx-auto px-4 py-8">
             <button onclick="showHome()" class="mb-6 flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-black uppercase tracking-widest">
@@ -205,7 +195,6 @@
             </button>
 
             <div class="flex flex-col lg:flex-row gap-12">
-                <!-- Gallery -->
                 <div class="w-full lg:w-1/2 space-y-4">
                     <div class="bg-gray-50 rounded-3xl p-8 flex items-center justify-center min-h-[400px]">
                         <img id="detail-main-img" src="" class="max-h-[500px] object-contain">
@@ -216,7 +205,6 @@
                     <div class="flex gap-4 overflow-x-auto no-scrollbar py-2" id="detail-thumbs"></div>
                 </div>
 
-                <!-- Info -->
                 <div class="w-full lg:w-1/2">
                     <p id="detail-cat" class="text-xs text-blue-600 font-black uppercase mb-2">Category</p>
                     <h1 id="detail-name" class="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-6 uppercase italic tracking-tighter">Product Name</h1>
@@ -259,7 +247,6 @@
         </div>
     </div>
 
-    <!-- CART DRAWER -->
     <div id="cart-drawer" class="fixed inset-0 z-[1100] hidden">
         <div class="absolute inset-0 bg-black/60" onclick="toggleCart()"></div>
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#f0f2f2] shadow-2xl flex flex-col">
@@ -281,54 +268,23 @@
     </div>
 
     <script>
-        const storeItems = [
-            { 
-                id: 1, 
-                category: 'Audio', 
-                name: "Sony WH-1000XM5 Noise Cancelling", 
-                img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", 
-                images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=800", "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800"], 
-                video: "https://www.youtube.com/embed/S_8n0769XlE",
-                description: "The world's best noise cancelling gets even better. <br><br> • Integrated Processor V1 <br> • 8 Microphones for noise cancellation <br> • Precise Voice Pickup technology.",
-                variants: [
-                    { label: "Standard Edition", price: 85000, oldPrice: 95000 },
-                    { label: "Midnight Blue", price: 88000, oldPrice: 98000 }
-                ]
-            },
-                        { 
-                id: 1, 
-                category: 'Audio', 
-                name: "Sony WH-1000XM5 Noise Cancelling", 
-                img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", 
-                images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=800", "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800"], 
-                video: "https://www.youtube.com/embed/S_8n0769XlE",
-                description: "The world's best noise cancelling gets even better. <br><br> • Integrated Processor V1 <br> • 8 Microphones for noise cancellation <br> • Precise Voice Pickup technology.",
-                variants: [
-                    { label: "Standard Edition", price: 85000, oldPrice: 95000 },
-                    { label: "Midnight Blue", price: 88000, oldPrice: 98000 }
-                ]
-            },
-            { 
-                id: 2, 
-                category: 'Computing', 
-                name: "MacBook Pro M3 Max 16\"", 
-                img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800", 
-                images: ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800", "https://images.unsplash.com/photo-1611186871348-b1ec696e523b?w=800"], 
-                video: "https://www.youtube.com/embed/0pg_Y41waaE",
-                description: "Mind-blowing performance. Boundary-pushing display. <br><br> • M3 Max with 16-core CPU <br> • 128GB Unified Memory support <br> • Liquid Retina XDR screen.",
-                variants: [
-                    { label: "16GB / 512GB", price: 425000, oldPrice: 480000 },
-                    { label: "32GB / 1TB", price: 545000, oldPrice: 620000 }
-                ]
-            }
-        ];
-
+        let storeItems = [];
         let cart = [];
         let activeProduct = null;
         let selectedVariantIdx = 0;
         let currentHeroSlide = 0;
 
-        // NAVIGATION LOGIC
+        // FETCH DATA FROM JSON
+        async function loadStoreData() {
+            try {
+                const response = await fetch('data.json');
+                storeItems = await response.json();
+                renderDeals();
+            } catch (err) {
+                console.error("Error loading JSON data:", err);
+            }
+        }
+
         function showHome() {
             document.getElementById('home-view').classList.remove('hidden-view');
             document.getElementById('product-detail-view').classList.add('hidden-view');
@@ -344,7 +300,6 @@
             window.scrollTo(0, 0);
         }
 
-        // HERO SLIDER
         function goToSlide(index) {
             const slider = document.getElementById('hero-slider');
             const dots = document.querySelectorAll('.hero-dot');
@@ -355,9 +310,9 @@
 
         setInterval(() => goToSlide((currentHeroSlide + 1) % 2), 8000);
 
-        // DATA RENDERING
         function renderDeals() {
             const grid = document.getElementById('deals-grid');
+            if(!grid) return;
             grid.innerHTML = storeItems.map(item => `
                 <div class="product-card p-4 flex flex-col" onclick="showProductDetail(${item.id})">
                     <div class="h-40 flex items-center justify-center mb-4"><img src="${item.img}" class="max-h-full object-contain"></div>
@@ -380,7 +335,6 @@
             const disc = Math.round(((variant.oldPrice - variant.price) / variant.oldPrice) * 100);
             document.getElementById('detail-discount').innerText = `-${disc}%`;
 
-            // Render Thumbnails
             const thumbContainer = document.getElementById('detail-thumbs');
             let thumbsHtml = activeProduct.images.map((img, i) => `
                 <div class="gallery-thumb w-20 h-20 shrink-0 rounded-xl p-2 bg-gray-50 border-2 ${i===0?'active':''}" onclick="switchMedia(${i}, 'image')">
@@ -388,15 +342,16 @@
                 </div>
             `).join('');
             
-            thumbsHtml += `
-                <div class="gallery-thumb w-20 h-20 shrink-0 rounded-xl p-2 bg-gray-100 border-2 relative" onclick="switchMedia(${activeProduct.images.length}, 'video')">
-                    <img src="${activeProduct.img}" class="w-full h-full object-contain opacity-40">
-                    <i class="fas fa-play-circle absolute inset-0 flex items-center justify-center text-red-600 text-2xl"></i>
-                </div>
-            `;
+            if(activeProduct.video) {
+                thumbsHtml += `
+                    <div class="gallery-thumb w-20 h-20 shrink-0 rounded-xl p-2 bg-gray-100 border-2 relative" onclick="switchMedia(${activeProduct.images.length}, 'video')">
+                        <img src="${activeProduct.img}" class="w-full h-full object-contain opacity-40">
+                        <i class="fas fa-play-circle absolute inset-0 flex items-center justify-center text-red-600 text-2xl"></i>
+                    </div>
+                `;
+            }
             thumbContainer.innerHTML = thumbsHtml;
 
-            // Variants
             const variantContainer = document.getElementById('detail-variants');
             variantContainer.innerHTML = activeProduct.variants.map((v, idx) => `
                 <div class="relative">
@@ -476,7 +431,7 @@
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
         function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2000); }
 
-        window.onload = () => { renderDeals(); updateCartUI(); };
+        window.onload = loadStoreData;
     </script>
 </body>
 </html>
