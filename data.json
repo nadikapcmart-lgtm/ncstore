@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "category": "Audio",
+    "name": "Sony WH-1000XM5 Noise Cancelling",
+    "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
+    "images": ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800", "https://images.unsplash.com/photo-1546435770-a3e4265029b6?w=800"],
+    "video": "https://www.youtube.com/embed/S_8n0769XlE",
+    "description": "The world's best noise cancelling gets even better.",
+    "variants": [
+      { "label": "Standard Edition", "price": 85000, "oldPrice": 95000 },
+      { "label": "Midnight Blue", "price": 88000, "oldPrice": 98000 }
+    ]
+  }
+]
